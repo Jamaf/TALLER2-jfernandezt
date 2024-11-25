@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacer sonido</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"    
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Hacer sonido</h2>
+
+            <form id="formAnimales">
+                <fieldset>
+                  <legend>Escoja un animal</legend>
+              
+                  <input type="radio" id="perro" name="animales" value="Perro" />
+                  <label>Perro</label><br/>
+              
+                  <input type="radio" id="gato" name="animales" value="Gato" />
+                  <label>Gato</label><br/>
+              
+                  <input type="radio" id="huron" name="animales" value="Huron" />
+                  <label>Huron</label><br/>
+
+                  <input type="radio" id="boa" name="animales" value="Boa" />
+                  <label>Boa</label><br/>
+
+                  <input type="radio" id="loro" name="animales" value="Loro" />
+                  <label>Loro (para ver mensaje de error)</label>                     
+
+                </fieldset>
+                <a onclick="sonidoPorAnimal()" class="btn">Consultar sonido</a>
+            </form>
+              
+        </div>
+    </div>
+    <script>
+
+        async function sonidoPorAnimal() {
+            // Obtener el formulario
+            const formulario = document.getElementById('formAnimales');
+            
+            // Obtener el valor seleccionado
+            const seleccionado = formulario.elements['animales'].value;
+
+            // Verificar si se seleccionó una opción
+            if (seleccionado) {
+                try {
+                    // Llamar al endpoint Flask
+                    const response = await fetch(`animales/hacer_sonido/${seleccionado}/`, {
+                        method: 'GET',
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        alert(`Has seleccionado: ${data.animal}, Sonido: ${data.sonido}`);
+                    } else {
+                        const data = await response.json();
+                        alert(`Has seleccionado: ${data.animal}, Mensaje: ${data.error_msg}`);
+                    }
+                } catch (error) {
+                    console.error('Error al realizar la solicitud:', error);
+                    alert('Error al realizar la solicitud.');
+                }
+            } else {
+                alert('Por favor, selecciona un elemento.');
+            }
+        }        
+    </script>    
+</body>
+</html>
