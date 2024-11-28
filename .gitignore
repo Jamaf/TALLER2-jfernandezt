@@ -9,3 +9,6 @@
 
 # Ignorar cache de Python
 __pycache__/
+
+# Ignorar todos los archivos zip
+*.zip
